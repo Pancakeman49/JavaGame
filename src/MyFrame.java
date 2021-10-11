@@ -4,20 +4,21 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
 public class MyFrame extends JFrame {
-    MyPanel panel;
+    Playfield playfield;
+
     MyFrame(){
-        panel = new MyPanel();
+        this.setPreferredSize(new Dimension(800,600));
+        playfield = new Playfield(new Dimension(800,600));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-        this.add(panel);
+        this.add(playfield);
         this.pack();
 
-        panel.addComponentListener(new ComponentListener() {
+        this.addComponentListener(new ComponentListener() {
             @Override
             public void componentResized(ComponentEvent e) {
-                panel.height = panel.getHeight();
-                panel.width = panel.getWidth();
+                playfield.setDim(new Dimension(playfield.getWidth(), playfield.getHeight()));
             }
 
             @Override
@@ -35,5 +36,6 @@ public class MyFrame extends JFrame {
 
             }
         });
+
     }
 }
