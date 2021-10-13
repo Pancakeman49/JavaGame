@@ -3,10 +3,10 @@ import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
-public class MyFrame extends JFrame {
+public class Window extends JFrame {
     Playfield playfield;
 
-    MyFrame(){
+    Window(){
         this.setPreferredSize(new Dimension(800,600));
         playfield = new Playfield(new Dimension(800,600));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

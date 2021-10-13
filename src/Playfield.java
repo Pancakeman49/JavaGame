@@ -5,11 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-/*
-TODO
-Move the moving logic to enemy class
-Make it so that i can just init multiple enemy's
- */
+
 
 
 
@@ -18,18 +14,14 @@ public class Playfield extends JPanel {
     private BufferedImage image;
     int x, y = 0, velx = 4, vely = 4;
     private Enemy enemy;
+    private Enemy enemy1;
     private Dimension dim;
+
     private Timer t = new Timer(5, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (x < 0 || x > dim.width - 226){
-                velx = -velx;
-            }
-            if (y < 0 || y >  dim.height - 226){
-                vely = -vely;
-            }
-            x += velx;
-            y += vely;
+            enemy.Move(dim);
+            enemy1.Move(dim);
             repaint();
         }
     });
@@ -39,6 +31,7 @@ public class Playfield extends JPanel {
         this.setPreferredSize(d);
         dim = d;
         InitEnemy();
+
     }
 
     private void InitEnemy(){
@@ -51,15 +44,20 @@ public class Playfield extends JPanel {
         }
 
         //inits enemy with all the required vars
-        enemy = new Enemy(226, 226, image);
+        enemy = new Enemy(226, 226, image, this.getGraphics(), 0,0);
+        enemy1 = new Enemy(226, 226, image, this.getGraphics(), 100, 0);
     }
 
     public void paint(Graphics g){
         super.paint(g);
-        enemy.Paint(g,x,y);
+        enemy.Paint(g);
+        enemy1.Paint(g);
+
+
+        //paints x and y for enemy
         g.setFont(new Font("Ariel", Font.PLAIN, 24));
         g.setColor(Color.BLACK);
-        g.drawString("X:" + x + " Y: " + y,10,20);
+        g.drawString("X:" + enemy.getEnemyX() + " Y: " + enemy.getEnemyY(),10,20);
         t.start();
     }
 
