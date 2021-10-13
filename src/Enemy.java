@@ -11,15 +11,13 @@ public class Enemy {
     private int enemyWidth;
     private int enemyHeight;
     private BufferedImage enemyImage;
-    private Graphics playFieldG;
     private int enemyX, enemyY = 0, velx = 4, vely = 4;
 
 
-    public Enemy (int width, int height, BufferedImage image, Graphics g, int x, int y){
+    public Enemy (int width, int height, BufferedImage image, int x, int y){
         this.enemyHeight = height;
         this.enemyWidth = width;
         this.enemyImage = image;
-        this.playFieldG = g;
         this.enemyX = x;
         this.enemyY = y;
     }

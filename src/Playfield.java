@@ -44,8 +44,8 @@ public class Playfield extends JPanel {
         }
 
         //inits enemy with all the required vars
-        enemy = new Enemy(226, 226, image, this.getGraphics(), 0,0);
-        enemy1 = new Enemy(226, 226, image, this.getGraphics(), 100, 0);
+        enemy = new Enemy(226, 226, image, 0,0);
+        enemy1 = new Enemy(226, 226, image, 100, 0);
     }
 
     public void paint(Graphics g){
