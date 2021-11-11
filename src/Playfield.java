@@ -1,27 +1,24 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
-
-
-
+import java.util.Random;
 
 
 public class Playfield extends JPanel {
     private BufferedImage image;
-    int x, y = 0, velx = 4, vely = 4;
-    private Enemy enemy;
-    private Enemy enemy1;
+    private Enemy[] enemies = new Enemy[3];
     private Dimension dim;
 
     private Timer t = new Timer(5, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            enemy.Move(dim);
-            enemy1.Move(dim);
+            enemies[0].Move(dim);
+            enemies[1].Move(dim);
+            enemies[2].Move(dim);
             repaint();
         }
     });
@@ -30,34 +27,68 @@ public class Playfield extends JPanel {
     Playfield(Dimension d){
         this.setPreferredSize(d);
         dim = d;
-        InitEnemy();
+
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                Point clckPoint = e.getPoint();
+                System.out.println("mouse clicked");
+                for (Enemy enemy: enemies) {
+                    if (clckPoint.x >= enemy.getEnemyX() && clckPoint.x <= enemy.getEnemyX() + 226){
+                        if (clckPoint.y >= enemy.getEnemyY() && clckPoint.y <= enemy.getEnemyY() + 226){
+                            System.out.println("Kaching");
+                            enemy.setDeadEnemyStatus(true);
+                        }
+                    }
+                }
+            }
+        });
+
+
 
     }
+    public void EnableEnemies(){
+        for (Enemy enemy:enemies) {
+            enemy.setDeadEnemyStatus(false);
+        }
+    }
 
-    private void InitEnemy(){
+    public void InitEnemy(){
         //gets image from res folder and sets it in BufferedImage
         try {
-            image = ImageIO.read(getClass().getResourceAsStream("/5842-che-thonk.png"));
+            image = ImageIO.read(new File("res/5842-che-thonk.png"));
         }catch (IOException e){
             System.out.println("Image missing u dumbass");
             e.printStackTrace();
         }
 
+        Random random = new Random();
         //inits enemy with all the required vars
-        enemy = new Enemy(226, 226, image, 0,0);
-        enemy1 = new Enemy(226, 226, image, 100, 0);
+
+        enemies[0] = new Enemy(226, 226, image, random.nextInt(0, dim.width - 226),random.nextInt(0, dim.height - 226));
+        enemies[1] = new Enemy(226, 226, image, random.nextInt(0, dim.width - 226),random.nextInt(0, dim.height - 226));
+        enemies[2] = new Enemy(226, 226, image, random.nextInt(0, dim.width - 226),random.nextInt(0, dim.height - 226));
     }
 
     public void paint(Graphics g){
         super.paint(g);
-        enemy.Paint(g);
-        enemy1.Paint(g);
+        for (Enemy enemy: enemies) {
+            if (!enemy.getDeadEnemyStatus()){
+                enemy.Paint(g);
+            }
+        }
+
 
 
         //paints x and y for enemy
         g.setFont(new Font("Ariel", Font.PLAIN, 24));
         g.setColor(Color.BLACK);
-        g.drawString("X:" + enemy.getEnemyX() + " Y: " + enemy.getEnemyY(),10,20);
+        int i = 0;
+        for (Enemy enemy: enemies) {
+            i++;
+            g.drawString("X:" + enemy.getEnemyX() + " Y: " + enemy.getEnemyY(),10 + (i * 200),20);
+        }
         t.start();
     }
 
