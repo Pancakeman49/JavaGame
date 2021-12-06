@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Scanner;
 
 public class Main {
     static Playfield playfield;
@@ -31,12 +30,26 @@ public class Main {
 
 
     }
+    static Timer MainTimer = new Timer(1000, new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int res = playfield.OneSecondTimer();
+            if (res == 1){
+                EndGame();
+            }
+        }
+    });
+    static void EndGame(){
+        window.getContentPane().remove(playfield);
+        window.repaint();
+    }
 
     static void SetPlayFieldDim(){
         playfield.setDim(new Dimension(window.getWidth(), window.getHeight()));
     }
     static void StartMenu(){
         startMenu = new JPanel();
+        startMenu.setBackground(new Color(0,0,255));
 
         JLabel label = new JLabel();
         label.setFont(new Font("Comic Sans MS", Font.PLAIN,24));
@@ -54,6 +67,7 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 InitPlayfield();
+                MainTimer.start();
             }
         });
 
@@ -64,6 +78,8 @@ public class Main {
         playfield = new Playfield(new Dimension(window.getWidth(), window.getHeight()));
         window.add(playfield);
         window.getContentPane().remove(startMenu);
+
+
 
         window.pack();
         window.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -95,26 +111,5 @@ public class Main {
 
             }
         });
-        window.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                System.out.println("key typed");
-                System.out.println(e.getKeyChar());
-                if (e.getKeyChar() == 'r'){
-                    playfield.EnableEnemies();
-                }
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-                System.out.println("key pressed");
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                System.out.println("key released");
-            }
-        });
-
     }
 }
