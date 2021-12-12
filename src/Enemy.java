@@ -1,10 +1,8 @@
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.sql.Time;
 import java.util.Random;
-import java.util.Timer;
 
 
 public class Enemy {
@@ -14,6 +12,7 @@ public class Enemy {
     private int enemyX, enemyY, velx = 4, vely = 4;
     private boolean dead = false;
     private Random random = new Random();
+    private int rotation;
 
 
 
@@ -34,9 +33,24 @@ public class Enemy {
         }
     }
 
-    public void Paint(Graphics g){
-        g.drawImage(enemyImage, enemyX, enemyY, enemyWidth, enemyHeight, null);
-        g.drawRect(enemyX, enemyY, enemyWidth, enemyHeight);
+    public void Paint(Graphics2D g2d){
+        //g2d.drawImage(enemyImage, enemyX, enemyY, enemyWidth, enemyHeight, null);
+        //g.drawRect(enemyX, enemyY, enemyWidth, enemyHeight);
+
+
+
+        if (rotation == 360){
+            rotation = 0;
+        }
+        double rotationRequired = Math.toRadians (rotation);
+        rotation++;
+        double locationX = enemyImage.getWidth() / 2;
+        double locationY = enemyImage.getHeight() / 2;
+        AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+
+        // Drawing the rotated image at the required drawing locations
+        g2d.drawImage(op.filter(enemyImage, null), enemyX, enemyY, null);
     }
 
     public void Move(Dimension dim){
@@ -66,7 +80,6 @@ public class Enemy {
         velx *= 1.5;
         vely *= 1.5;
     }
-
 
 
     public int getEnemyX(){
