@@ -174,7 +174,7 @@ public class Main {
         JLabel gameOverLabel2 = new JLabel();
         gameOverLabel2.setFont(mainFont);
         gameOverLabel2.setText("Your score: " + score);
-        gameOverLabel2.setBounds(20,40,200,40);
+        gameOverLabel2.setBounds(15,40,200,40);
 
 
         JButton tryAgainButton = new JButton();
@@ -227,7 +227,7 @@ public class Main {
 
 
     }
-    static Timer MainTimer = new Timer(10, new ActionListener() {
+    static Timer MainTimer = new Timer(1000, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             int res = playfield.OneSecondTimer();
